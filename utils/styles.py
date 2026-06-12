@@ -17,7 +17,15 @@ def apply_custom_css():
             font-size: 2.25rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-        }        
+        }
+                
+        /* H3/Markdown ### Container */
+        .h3-container {
+            font-size: 0.5rem;  /* Matches Streamlit's default h3/### size */
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            margin-top: 0.5rem;
+        }
         
         /* Gradient Headers */
         h1, h2, h3 {

@@ -6,8 +6,9 @@ from utils.gemini_helper import generate_workout_plan, init_session_state
 st.set_page_config(page_title="AI Workout Planner - FitAI", page_icon="💪", layout="wide")
 
 # 2. INITIALIZE SESSION AND STYLES
-init_session_state()
 apply_custom_css()
+
+init_session_state()
 
 # 3. RESPONSIVE TABLE CSS (Forces text to wrap on mobile devices)
 st.markdown("""

@@ -6,9 +6,10 @@ from utils.gemini_helper import init_session_state
 # This single line handles everything securely!
 st.set_page_config(page_title="BMI & Health - FitAI", page_icon="⚖️", layout="wide")
 
+apply_custom_css()
+
 init_session_state()
 
-apply_custom_css()
 
 # Initialize session state variables if they don't exist
 if 'user_profile' not in st.session_state:
