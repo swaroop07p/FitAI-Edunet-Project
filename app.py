@@ -1,7 +1,6 @@
 import streamlit as st
-import json
-import os
 from utils.styles import apply_custom_css
+from utils.gemini_helper import init_session_state
 
 # Page Configuration
 st.set_page_config(
@@ -11,31 +10,22 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# This single line handles everything securely!
+init_session_state()
+
 apply_custom_css()
 
-# --- NEW: Load from JSON to survive refreshes ---
-if 'user_profile' not in st.session_state:
-    if os.path.exists("user_data.json"):
-        try:
-            with open("user_data.json", "r") as f:
-                data = json.load(f)
-                st.session_state.user_profile = data.get("user_profile", {})
-                st.session_state.profile_complete = data.get("profile_complete", False)
-                if "api_key" in data:
-                    st.session_state.api_key = data["api_key"]
-        except Exception:
-            st.session_state.user_profile = {}
-            st.session_state.profile_complete = False
-    else:
-        st.session_state.user_profile = {}
-        st.session_state.profile_complete = False
-# ------------------------------------------------
-
-# Initialize session state variables
-if 'profile_complete' not in st.session_state:
-    st.session_state.profile_complete = False
+# Initialize empty state for EVERY new device/tab
 if 'user_profile' not in st.session_state:
     st.session_state.user_profile = {}
+if 'profile_complete' not in st.session_state:
+    st.session_state.profile_complete = False
+if 'api_key' not in st.session_state:
+    st.session_state.api_key = ""
+
+# --- NEW: Pull data from the browser ---
+# load_browser_data()
+# ---------------------------------------
 
 # Hero Section
 st.title("⚡ FitAI")

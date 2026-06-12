@@ -1,9 +1,22 @@
 import streamlit as st
 from utils.styles import apply_custom_css
 from utils.gemini_helper import generate_diet_plan
+from utils.gemini_helper import init_session_state
 
+# This single line handles everything securely!
 st.set_page_config(page_title="AI Diet Planner - FitAI", page_icon="🥗", layout="wide")
+
+init_session_state()
+
 apply_custom_css()
+
+# Initialize session state variables if they don't exist
+if 'user_profile' not in st.session_state:
+    st.session_state.user_profile = {}
+if 'profile_complete' not in st.session_state:
+    st.session_state.profile_complete = False
+if 'api_key' not in st.session_state:
+    st.session_state.api_key = ""
 
 st.title("🥗 AI Personalized Diet Planner")
 

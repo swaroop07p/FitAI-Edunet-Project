@@ -2,38 +2,71 @@ import google.generativeai as genai
 import streamlit as st
 import json
 import os
+import uuid
 
-# Helper to load saved data
-def load_local_data():
+# --- BULLETPROOF SESSION & DATA MANAGER ---
+def load_all_users():
     if os.path.exists("user_data.json"):
         try:
             with open("user_data.json", "r") as f:
                 return json.load(f)
-        except Exception:
+        except:
             return {}
     return {}
 
-def configure_gemini():
-    # 1. Try session state first
-    api_key = st.session_state.get('api_key', '')
+def save_user_data(user_id, key, value):
+    users = load_all_users()
+    if user_id not in users:
+        users[user_id] = {}
+    users[user_id][key] = value
+    with open("user_data.json", "w") as f:
+        json.dump(users, f)
+
+def init_session_state():
+    """Flawless session manager that survives sidebar navigation and page refreshes."""
     
-    # 2. Try loading from local JSON file if session state is empty (e.g., after refresh)
-    if not api_key:
-        local_data = load_local_data()
-        api_key = local_data.get('api_key', '')
-        st.session_state.api_key = api_key # Restore to session
+    # 1. RESTORE OR CREATE USER ID
+    if 'user_id' in st.session_state:
+        # If we navigated via sidebar, the URL param drops. Put it back so F5 works.
+        if st.query_params.get("user_id") != st.session_state.user_id:
+            st.query_params["user_id"] = st.session_state.user_id
+            
+    elif "user_id" in st.query_params:
+        # If we refreshed, session state is empty but URL has the ID. Restore session.
+        st.session_state.user_id = st.query_params["user_id"]
         
-    # 3. Try Streamlit secrets safely (prevents the crash)
-    try:
-        if not api_key and 'API_KEY' in st.secrets:
-            api_key = st.secrets["API_KEY"]
-    except Exception:
-        pass # It is completely fine if the secrets file doesn't exist
+    else:
+        # Brand new visit (New User / Incognito)
+        new_id = str(uuid.uuid4())
+        st.session_state.user_id = new_id
+        st.query_params["user_id"] = new_id
         
+    user_id = st.session_state.user_id
+    
+    # 2. ENSURE CORE DATA STRUCTURES EXIST
+    if 'user_profile' not in st.session_state:
+        st.session_state.user_profile = {}
+    if 'profile_complete' not in st.session_state:
+        st.session_state.profile_complete = False
+    if 'api_key' not in st.session_state:
+        st.session_state.api_key = ""
+        
+    # 3. LOAD DATA FROM JSON (Only once per session initialization)
+    if 'data_loaded' not in st.session_state:
+        users = load_all_users()
+        user_data = users.get(user_id, {})
+        
+        st.session_state.user_profile = user_data.get("user_profile", {})
+        st.session_state.profile_complete = user_data.get("profile_complete", False)
+        st.session_state.api_key = user_data.get("api_key", "")
+        st.session_state.data_loaded = True
+# ------------------------------------------
+
+def configure_gemini():
+    api_key = st.session_state.get('api_key', '')
     if not api_key:
         st.info("ℹ️ Please configure your Gemini API Key in the Settings page.")
         return False
-        
     genai.configure(api_key=api_key)
     return True
 
