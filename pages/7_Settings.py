@@ -11,7 +11,8 @@ apply_custom_css()
 # 3. INITIALIZE SECURE SESSION (Restores data & ID)
 init_session_state()
 
-st.title("⚙️ Settings")
+st.markdown('<div class="title-container">⚙️ <span class="gradient-text">Settings</span></div>', unsafe_allow_html=True)
+# st.title("⚙️ Settings")
 
 st.subheader("API Configuration")
 st.markdown("FitAI uses Google's Gemini API to generate intelligent plans.")

@@ -28,7 +28,9 @@ if 'api_key' not in st.session_state:
 # ---------------------------------------
 
 # Hero Section
-st.title("⚡ FitAI")
+
+st.markdown('<div class="title-container">⚡ <span class="gradient-text">FitAI</span></div>', unsafe_allow_html=True)
+# st.title("⚡ FitAI")
 st.subheader("Smart AI Fitness & Diet Planner for Students")
 
 st.markdown("""

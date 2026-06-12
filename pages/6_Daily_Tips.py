@@ -18,7 +18,8 @@ if 'profile_complete' not in st.session_state:
 if 'api_key' not in st.session_state:
     st.session_state.api_key = ""
 
-st.title("💡 Daily Tips & Motivation")
+st.markdown('<div class="title-container">💡 <span class="gradient-text">Daily Tips & Motivation</span></div>', unsafe_allow_html=True)
+# st.title("💡 Daily Tips & Motivation")
 
 st.markdown("Need a quick boost? Get your AI-generated daily wellness advice below.")
 

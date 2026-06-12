@@ -3,6 +3,10 @@ import streamlit as st
 import json
 import os
 import uuid
+from streamlit_cookies_controller import CookieController
+
+# Initialize the cookie controller once at the top level
+controller = CookieController()
 
 # --- BULLETPROOF SESSION & DATA MANAGER ---
 def load_all_users():
@@ -23,24 +27,37 @@ def save_user_data(user_id, key, value):
         json.dump(users, f)
 
 def init_session_state():
-    """Flawless session manager that survives sidebar navigation and page refreshes."""
+    """Flawless session manager that survives sidebar navigation, refreshes, and closed tabs."""
+    
+    # Grab the silent memory cookie if it exists
+    saved_cookie_id = controller.get('fitai_user_id')
     
     # 1. RESTORE OR CREATE USER ID
     if 'user_id' in st.session_state:
-        # If we navigated via sidebar, the URL param drops. Put it back so F5 works.
+        # If we navigated via sidebar, the URL param drops. Put it back.
         if st.query_params.get("user_id") != st.session_state.user_id:
             st.query_params["user_id"] = st.session_state.user_id
             
     elif "user_id" in st.query_params:
-        # If we refreshed, session state is empty but URL has the ID. Restore session.
+        # If we refreshed, or opened a bookmarked link with the ID
         st.session_state.user_id = st.query_params["user_id"]
+        # Backup the ID to the browser cookie
+        controller.set('fitai_user_id', st.session_state.user_id)
         
     else:
-        # Brand new visit (New User / Incognito)
-        new_id = str(uuid.uuid4())
-        st.session_state.user_id = new_id
-        st.query_params["user_id"] = new_id
-        
+        # Brand new visit to the base URL (e.g., just typing localhost:8501)
+        if saved_cookie_id:
+            # They visited before! Restore their ID from the cookie
+            st.session_state.user_id = saved_cookie_id
+            st.query_params["user_id"] = saved_cookie_id
+        else:
+            # Completely new user OR Incognito Mode
+            new_id = str(uuid.uuid4())
+            st.session_state.user_id = new_id
+            st.query_params["user_id"] = new_id
+            # Save this new ID to their browser
+            controller.set('fitai_user_id', new_id)
+            
     user_id = st.session_state.user_id
     
     # 2. ENSURE CORE DATA STRUCTURES EXIST

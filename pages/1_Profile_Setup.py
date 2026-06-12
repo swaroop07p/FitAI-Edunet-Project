@@ -11,7 +11,8 @@ apply_custom_css()
 # 3. INITIALIZE SECURE SESSION (Restores data & ID)
 init_session_state()
 
-st.title("👤 User Profile Setup")
+st.markdown('<div class="title-container">👤 <span class="gradient-text">User Profile Setup</span></div>', unsafe_allow_html=True)
+
 st.markdown("Tell us about yourself so our AI can craft the perfect plan for you.")
 
 with st.form("profile_form"):

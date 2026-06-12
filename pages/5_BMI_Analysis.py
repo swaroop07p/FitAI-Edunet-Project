@@ -18,7 +18,8 @@ if 'profile_complete' not in st.session_state:
 if 'api_key' not in st.session_state:
     st.session_state.api_key = ""
 
-st.title("⚖️ BMI & Health Analysis")
+st.markdown('<div class="title-container">⚖️ <span class="gradient-text">BMI & Health Analysis</span></div>', unsafe_allow_html=True)
+# st.title("⚖️ BMI & Health Analysis")
 
 if not st.session_state.get('profile_complete', False):
     st.info("👋 Please complete your profile setup first to view your BMI analysis.")
