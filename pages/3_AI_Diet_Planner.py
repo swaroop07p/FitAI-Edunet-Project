@@ -42,7 +42,7 @@ if not st.session_state.get('profile_complete', False):
 
 st.info(f"Generating plan based on: **{st.session_state.user_profile.get('diet_type', '')}** | Culture: **{st.session_state.user_profile.get('cultural_preference', '')}** | Budget: **{st.session_state.user_profile.get('budget', '')}**")
 
-if st.button("🍎 Generate AI Meal Plan"):
+if st.button("🍽️ Generate AI Meal Plan"):
     with st.spinner("Crafting a delicious, affordable meal plan for you..."):
         plan = generate_diet_plan(st.session_state.user_profile)
         

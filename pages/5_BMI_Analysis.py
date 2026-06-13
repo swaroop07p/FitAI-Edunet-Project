@@ -23,7 +23,7 @@ st.markdown('<div class="title-container">⚖️ <span class="gradient-text">BMI
 # st.title("⚖️ BMI & Health Analysis")
 
 if not st.session_state.get('profile_complete', False):
-    st.info("👋 Please complete your profile setup first to view your BMI analysis.")
+    st.warning("Please complete your profile setup first to view your BMI analysis.")
     st.stop()
 
 profile = st.session_state.user_profile

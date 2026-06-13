@@ -45,7 +45,7 @@ def apply_custom_css():
         
         /* Button styling */
         .stButton>button {
-            border-radius: 20px;
+            border-radius: 5px;
             border: none;
             /* CHANGED: Swapped button background to matching Cyan gradient */
             background: linear-gradient(90deg, #00F2FE 0%, #4FACFE 100%);

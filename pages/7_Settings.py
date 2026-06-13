@@ -19,7 +19,7 @@ st.markdown("FitAI uses Google's Gemini API to generate intelligent plans.")
 
 api_key = st.text_input("Enter Gemini API Key", type="password", value=st.session_state.get('api_key', ''))
 
-if st.button("Save API Key"):
+if st.button("🗝️ Save API Key"):
     st.session_state.api_key = api_key
     
     # Save to JSON using the URL ID
@@ -30,7 +30,7 @@ if st.button("Save API Key"):
 
 st.markdown("---")
 st.subheader("Data Management")
-if st.button("Reset My Data", type="primary"):
+if st.button("🔁 Reset My Data", type="primary"):
     current_user_id = st.session_state.user_id
     
     # Clear data in the JSON file ONLY for this user
